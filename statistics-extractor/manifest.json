@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "My Script Runner",
+  "version": "1.0",
+  "description": "Uruchamia skrypt na stronie",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "Run script"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
