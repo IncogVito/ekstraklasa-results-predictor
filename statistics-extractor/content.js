@@ -227,6 +227,8 @@
 
             const matchData = extractMatchData();
 
+            console.log("MatchData", JSON.stringify(matchData));
+
             const matchKey = `${matchData.matchTime}-${matchData.homeTeam}-${matchData.awayTeam}`;
             if (!visitedMatchKeys.has(matchKey)) {
                 visitedMatchKeys.add(matchKey);
