@@ -35,7 +35,7 @@
         right: '16px',
         bottom: '60px',
         width: '320px',
-        height: '200px',
+        height: 'auto',
         zIndex: '2147483647',
         background: '#fff',
         color: '#000',
@@ -46,7 +46,41 @@
         overflow: 'auto',
         fontSize: '13px'
       });
-      panel.textContent = 'Panel kontrolny rozszerzenia';
+
+      const title = document.createElement('div');
+      title.textContent = 'Panel kontrolny rozszerzenia';
+      title.style.marginBottom = '8px';
+      panel.appendChild(title);
+
+      const startBtn = document.createElement('button');
+      startBtn.id = 'ekstraklasa-start-btn';
+      startBtn.textContent = 'Start';
+      Object.assign(startBtn.style, {
+        padding: '6px 10px',
+        borderRadius: '4px',
+        background: '#0b5fff',
+        color: '#fff',
+        border: 'none',
+        cursor: 'pointer'
+      });
+
+      startBtn.addEventListener('click', async () => {
+        if (startBtn.disabled) return;
+        startBtn.disabled = true;
+        startBtn.textContent = 'Uruchamianie…';
+        try {
+          await ekstraklasaSeasonScraper();
+          startBtn.textContent = 'Zakończono';
+        } catch (err) {
+          console.error(err);
+          startBtn.textContent = 'Błąd';
+        } finally {
+          // leave disabled to avoid accidental re-run; user can reopen panel to start again
+        }
+      });
+
+      panel.appendChild(startBtn);
+
       document.body.appendChild(panel);
     });
 
@@ -60,11 +94,14 @@
   }
 })();
 
-(async function ekstraklasaSeasonScraper() {
+async function ekstraklasaSeasonScraper() {
     /**********************
      * UI – status box
      **********************/
     function createStatusBox() {
+        const existing = document.getElementById("ekstraklasa-scraper-status");
+        if (existing) return existing;
+
         const statusBox = document.createElement("div");
         statusBox.id = "ekstraklasa-scraper-status";
         statusBox.style.position = "fixed";
@@ -82,11 +119,12 @@
         return statusBox;
     }
 
+    let statusBox = createStatusBox();
+
     function updateStatus(message) {
+        if (!statusBox) statusBox = createStatusBox();
         statusBox.innerText = message;
     }
-
-    const statusBox = createStatusBox();
 
     /**********************
      * Helpers
@@ -244,4 +282,4 @@
     updateStatus(`✅ Gotowe! Mecze: ${extractedMatches.length}`);
 
     console.log("📦 Ekstraklasa JSON:", extractedMatches);
-})();
+}

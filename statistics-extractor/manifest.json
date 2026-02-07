@@ -3,12 +3,9 @@
   "name": "Ekstraklasa statistics extractor",
   "version": "1.0",
   "description": "Scrap data from ekstraklasa statistics page and export it to JSON file",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab"],
   "action": {
     "default_title": "Ekstraklasa statistics extractor"
-  },
-  "background": {
-    "service_worker": "background.js"
   },
   "content_scripts": [
     {
