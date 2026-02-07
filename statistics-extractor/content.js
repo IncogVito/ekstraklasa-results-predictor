@@ -1,3 +1,65 @@
+(function() {
+  function createControl() {
+    if (!document.body) return;
+    if (document.getElementById('statistics-extractor-control')) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'statistics-extractor-control';
+    btn.textContent = 'Stat.';
+    Object.assign(btn.style, {
+      position: 'fixed',
+      right: '16px',
+      bottom: '16px',
+      zIndex: '2147483647',
+      padding: '8px 12px',
+      borderRadius: '6px',
+      background: '#0b5fff',
+      color: '#fff',
+      border: 'none',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+      cursor: 'pointer',
+      fontSize: '13px'
+    });
+
+    btn.addEventListener('click', () => {
+      const panelId = 'statistics-extractor-panel';
+      let panel = document.getElementById(panelId);
+      if (panel) {
+        panel.remove();
+        return;
+      }
+      panel = document.createElement('div');
+      panel.id = panelId;
+      Object.assign(panel.style, {
+        position: 'fixed',
+        right: '16px',
+        bottom: '60px',
+        width: '320px',
+        height: '200px',
+        zIndex: '2147483647',
+        background: '#fff',
+        color: '#000',
+        border: '1px solid #ccc',
+        borderRadius: '6px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        padding: '12px',
+        overflow: 'auto',
+        fontSize: '13px'
+      });
+      panel.textContent = 'Panel kontrolny rozszerzenia';
+      document.body.appendChild(panel);
+    });
+
+    document.body.appendChild(btn);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createControl);
+  } else {
+    createControl();
+  }
+})();
+
 (async function ekstraklasaSeasonScraper() {
     /**********************
      * UI – status box
