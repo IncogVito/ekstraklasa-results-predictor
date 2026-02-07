@@ -122,6 +122,7 @@ async function ekstraklasaSeasonScraper() {
     let statusBox = createStatusBox();
 
     function updateStatus(message) {
+        console.log(message);
         if (!statusBox) statusBox = createStatusBox();
         statusBox.innerText = message;
     }
@@ -150,6 +151,37 @@ async function ekstraklasaSeasonScraper() {
         });
     }
 
+    // DODANO: szuka .stat-group.stat-box, który wewnątrz ma .title-bar .section-title równy expectedTitle
+    function findStatGroupByTitle(expectedTitle) {
+        const groups = document.querySelectorAll('.stat-group.stat-box');
+        const target = String(expectedTitle).trim().toLowerCase();
+        for (const g of groups) {
+            const titleEl = g.querySelector('.title-bar .section-title');
+            if (titleEl && titleEl.innerText.trim().toLowerCase() === target) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    // DODANO: oczekuje aż pojawi się stat-group z określonym tytułem (polling)
+    function waitForStatGroupWithTitle(expectedTitle, timeout = 10000) {
+        return new Promise((resolve, reject) => {
+            const startTime = Date.now();
+            const interval = setInterval(() => {
+                const found = findStatGroupByTitle(expectedTitle);
+                if (found) {
+                    clearInterval(interval);
+                    resolve(found);
+                }
+                if (Date.now() - startTime > timeout) {
+                    clearInterval(interval);
+                    reject(`Timeout waiting for stat-group with title "${expectedTitle}"`);
+                }
+            }, 300);
+        });
+    }
+
     /**********************
      * Data extraction
      **********************/
@@ -169,24 +201,26 @@ async function ekstraklasaSeasonScraper() {
         );
     }
 
+    // ZMIENIONO: szuka nagłówka w obrębie stat-group z tytułem "Final Results"
+    function extractTeamsFromTableHeader() {
+        const statGroup = findStatGroupByTitle('Final Results');
+        if (!statGroup) return null;
+
+        const headerRow = statGroup.querySelector('thead tr.row.header');
+        if (!headerRow) return null;
+
+        const teamLinks = headerRow.querySelectorAll('th.item.stat a.black');
+        return {
+            homeTeam: teamLinks[0]?.innerText.trim() || null,
+            awayTeam: teamLinks[1]?.innerText.trim() || null
+        };
+    }
+
     function extractMatchTime() {
         const timeElement = document.querySelector(
             ".match-info .timezone-convert-match-h2h-neo"
         );
         return timeElement ? timeElement.innerText.trim() : null;
-    }
-
-    function extractTeamsFromTableHeader() {
-        const headerRow = document.querySelector(
-            ".stat-group.stat-box thead tr.row.header"
-        );
-        if (!headerRow) return null;
-
-        const teamLinks = headerRow.querySelectorAll("th.item.stat a.black");
-        return {
-            homeTeam: teamLinks[0]?.innerText.trim() || null,
-            awayTeam: teamLinks[1]?.innerText.trim() || null
-        };
     }
 
     function extractFinalScore() {
@@ -244,6 +278,7 @@ async function ekstraklasaSeasonScraper() {
         const clubName = clubElement.innerText.trim();
 
         updateStatus(`➡️ Klub (${clubIndex + 1}/${clubElements.length}): ${clubName}`);
+        console.log(clubElement);
         clubElement.click();
 
         await sleep(1500);
@@ -261,7 +296,8 @@ async function ekstraklasaSeasonScraper() {
 
             matchElement.click();
             await sleep(1500);
-            await waitForElement(".stat-group.stat-box");
+            // czekaj na specyficzną grupę statystyk z tytułem "Final Results"
+            await waitForStatGroupWithTitle("Final Results");
 
             const matchData = extractMatchData();
 
