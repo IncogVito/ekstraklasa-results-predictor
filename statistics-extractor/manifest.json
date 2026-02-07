@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "My Script Runner",
+  "name": "Ekstraklasa statistics extractor",
   "version": "1.0",
-  "description": "Uruchamia skrypt na stronie",
+  "description": "Scrap data from ekstraklasa statistics page and export it to JSON file",
   "permissions": ["activeTab", "scripting"],
   "action": {
-    "default_title": "Run script"
+    "default_title": "Ekstraklasa statistics extractor"
   },
   "background": {
     "service_worker": "background.js"
