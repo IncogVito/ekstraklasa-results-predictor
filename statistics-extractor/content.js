@@ -296,8 +296,6 @@ async function ekstraklasaSeasonScraper() {
 
             matchElement.click();
             await sleep(1500);
-            // czekaj na specyficzną grupę statystyk z tytułem "Final Results"
-            await waitForStatGroupWithTitle("Final Results");
 
             const matchData = extractMatchData();
 
