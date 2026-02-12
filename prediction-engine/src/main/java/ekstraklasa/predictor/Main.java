@@ -9,13 +9,20 @@ import ekstraklasa.predictor.service.TableCalculationsService;
 import ekstraklasa.predictor.service.TeamFixturePredictor;
 import ekstraklasa.predictor.service.TeamStrengthCalculationService;
 import lombok.SneakyThrows;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+@SpringBootApplication
 public class Main {
 
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
     @SneakyThrows
-    static void main() {
+    public void run2(String... args) {
         var result = CSVFileReader.readConstantFile();
         System.out.print(result);
         var standings = TableCalculationsService.calculateLeagueStandings(result.results);
@@ -25,7 +32,6 @@ public class Main {
         var sortedStrength = strength.entrySet().stream()
                 .sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue()))
                 .toList();
-
 
         var prediction = TeamFixturePredictor.predictFixtureFromClubMap(strength, result.fixtures.getFirst(), null);
         var predictedResult = OutcomeSampler.sample(prediction);

@@ -2,6 +2,8 @@ openapi: 3.0.3
 info:
   title: Table Prediction API
   version: 1.0.0
+servers:
+  - url: http://localhost:8080
 paths:
   /table-prediction:
     get:

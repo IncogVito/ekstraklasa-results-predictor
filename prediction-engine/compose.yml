@@ -1,0 +1,23 @@
+services:
+  prediction-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prediction-engine:1.0
+    container_name: prediction-engine
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m
+      - SPRING_PROFILES_ACTIVE=prod
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
