@@ -5,7 +5,6 @@ import ekstraklasa.predictor.reader.CSVFileReader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -17,12 +16,8 @@ public class MonteCarloSimulation {
     private static final int DEFAULT_SIMULATIONS = 20000;
     private static final Random rand = new Random();
 
-    public static SimulationResult run() throws Exception {
-        return run(DEFAULT_SIMULATIONS);
-    }
 
-    public static SimulationResult run(int simulations) throws Exception {
-        var read = CSVFileReader.readConstantFile();
+    public static SimulationResult run(CSVFileReader.ReadResult read, int simulations) throws Exception {
         List<MatchFixture> fixtures = read.fixtures;
         List<MatchResult> baseResults = read.results;
         List<FootballClub> clubs = read.clubs;
@@ -32,7 +27,7 @@ public class MonteCarloSimulation {
         }
 
         // calculate strengths once
-        var strength = TeamStrengthCalculationService.calculateAllTeamsStrength((List) clubs, baseResults);
+        var strength = TeamStrengthCalculationService.calculateAllTeamsStrength(clubs, baseResults);
 
         SimulationResult simulationResult = new SimulationResult(clubs.size());
 

@@ -6,11 +6,15 @@ services:
     image: prediction-engine:1.0
     container_name: prediction-engine
     restart: unless-stopped
+    network_mode: host
     ports:
       - "8081:8081"
     environment:
       - JAVA_OPTS=-Xms512m -Xmx1024m
       - SPRING_PROFILES_ACTIVE=prod
+      - CONSUMABLE_FOLDER_PATH=/app/consumable
+    volumes:
+      - ./consumable:/app/consumable
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/" ]
       interval: 30s

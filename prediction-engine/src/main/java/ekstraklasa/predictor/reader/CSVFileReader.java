@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.Normalizer;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -29,8 +31,19 @@ public class CSVFileReader {
     private static final Pattern NON_WORD = Pattern.compile("[^a-z0-9_]+");
 
     public static ReadResult readConstantFile() throws IOException {
-        try (Reader r = new InputStreamReader(Objects.requireNonNull(CSVFileReader.class.getResourceAsStream(RESOURCE_CSV)), StandardCharsets.UTF_8);
-             CSVReader csv = new CSVReader(r)) {
+        try (Reader r = new InputStreamReader(Objects.requireNonNull(CSVFileReader.class.getResourceAsStream(RESOURCE_CSV)), StandardCharsets.UTF_8)) {
+            return readFromReader(r);
+        }
+    }
+
+    public static ReadResult readFromPath(Path path) throws IOException {
+        try (Reader r = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            return readFromReader(r);
+        }
+    }
+
+    private static ReadResult readFromReader(Reader r) throws IOException {
+        try (CSVReader csv = new CSVReader(r)) {
 
             String[] header = csv.readNext();
             if (header == null) throw new IOException("Empty CSV");

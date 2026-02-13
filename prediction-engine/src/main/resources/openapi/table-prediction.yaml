@@ -2,79 +2,67 @@ openapi: 3.0.3
 info:
   title: Table Prediction API
   version: 1.0.0
+
 servers:
   - url: http://localhost:8080
+
 paths:
   /table-prediction:
     get:
-      summary: "Zwraca przewidywaną tabelę ligi na podstawie dostępnych wyników"
-      parameters:
-        - name: simulationIterations
-          in: query
-          description: "Liczba iteracji symulacji (opcjonalne, domyślnie 2000)"
-          required: false
-          schema:
-            type: integer
-            format: int32
-            default: 2000
+      summary: "Zwraca listę predykcji tabeli ligowej"
       responses:
         '200':
-          description: "Tabela ligowa (predykcja)"
+          description: "Lista predykcji"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeagueTableModel'
-        '400':
-          description: "Błędny parametr wejściowy"
+                type: array
+                items:
+                  $ref: '#/components/schemas/TablePredictionModel'
+
+  /team-strength:
+    get:
+      summary: "Zwraca siłę drużyn (footballClubCode -> strength)"
+      responses:
+        '200':
+          description: "Mapa siły drużyn"
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: number
+                  format: double
+
 components:
   schemas:
-    FootballClubModel:
+    TablePredictionModel:
       type: object
       properties:
         id:
           type: string
-          nullable: true
-        name:
+        footballClubCode:
           type: string
-        code:
+        timestamp:
           type: string
-      required:
-        - name
-        - code
-    LeagueStandingsEntryModel:
-      type: object
-      properties:
-        footballClub:
-          $ref: '#/components/schemas/FootballClubModel'
-        position:
+          format: date-time
+        matchPlayed:
           type: integer
-        playedGames:
+          format: int32
+        ranking:
           type: integer
-        wonGames:
-          type: integer
-        drawnGames:
-          type: integer
-        lostGames:
-          type: integer
-        goalsFor:
-          type: integer
-        goalsAgainst:
-          type: integer
-        goalDifference:
-          type: integer
+          format: int32
         points:
           type: integer
+          format: int32
+        top4Prediction:
+          type: number
+          format: double
+        relegationPrediction:
+          type: number
+          format: double
       required:
-        - footballClub
-        - position
+        - footballClubCode
+        - timestamp
+        - ranking
         - points
-    LeagueTableModel:
-      type: object
-      properties:
-        standingsEntry:
-          type: array
-          items:
-            $ref: '#/components/schemas/LeagueStandingsEntryModel'
-      required:
-        - standingsEntry
-
