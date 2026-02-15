@@ -1,0 +1,58 @@
+.simulated-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.simulated-score input {
+    width: 32px;
+    height: 40px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    padding: 0;
+    appearance: textfield;
+    /* Remove spinner buttons */
+    caret-color: transparent;
+    /* Hide blinking cursor */
+}
+
+/* Remove spinner buttons for Chrome, Safari, Edge, Opera */
+.simulated-score input::-webkit-outer-spin-button,
+.simulated-score input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove spinner buttons for Firefox */
+.simulated-score input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.simulated-score input:focus, .simulated-score--both input {
+    outline: none;
+    border-color: #646cff;
+    background: #222;
+    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.simulated-score input::placeholder {
+    color: #444;
+    font-weight: 400;
+}
+
+.colon {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #555;
+    margin: 0 0.2rem;
+    padding-bottom: 4px;
+    /* Visual alignment */
+}

@@ -1,0 +1,95 @@
+.percentage-card {
+    background: rgba(30, 30, 30, 0.6);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+    margin-bottom: 2rem;
+
+    @media (max-width: 768px) {
+        padding: 2rem;
+        margin: 0.5rem;
+    }
+}
+
+.label {
+    font-size: 1.2rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.value-container {
+    font-size: 6rem;
+    font-weight: 800;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+    @media (max-width: 768px) {
+        font-size: 5rem;
+    }
+}
+
+.status-text {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.safe .value {
+    color: #4ade80;
+    text-shadow: 0 0 30px rgba(74, 222, 128, 0.4);
+}
+
+.safe .status-text {
+    color: #4ade80;
+}
+
+.safe {
+    border-color: rgba(74, 222, 128, 0.2);
+}
+
+.warning .value {
+    color: #fbbf24;
+    text-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+}
+
+.warning .status-text {
+    color: #fbbf24;
+}
+
+.warning {
+    border-color: rgba(251, 191, 36, 0.2);
+}
+
+.danger .value {
+    color: #ef4444;
+    text-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+}
+
+.danger .status-text {
+    color: #ef4444;
+}
+
+.danger {
+    border-color: rgba(239, 68, 68, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
